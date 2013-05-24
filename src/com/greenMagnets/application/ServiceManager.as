@@ -104,7 +104,7 @@ package com.greenMagnets.application
 			var value:URLVariables = new URLVariables();
 			value['magnet'] = com.adobe.serialization.json.JSON.encode( magnet );
 			value['opera'] = CREATE_MAGNETS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -134,7 +134,7 @@ package com.greenMagnets.application
 			//添加 一些分页相关的功能 2012-12-19 晚
 			value['limit_start'] = page; //页起始点
 			value['page_size'] = pageSize; //页大小，目前最大支持50，如果需要更多请联系 shijie. li.
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -150,7 +150,7 @@ package com.greenMagnets.application
 			var value:URLVariables = new URLVariables();
 			value['magnet'] = com.adobe.serialization.json.JSON.encode( magnet );
 			value['opera'] = EDIT_MAGNETS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -166,7 +166,7 @@ package com.greenMagnets.application
 			var value:URLVariables = new URLVariables();
 			value['id'] = id;
 			value['opera'] = DEL_MAGNETS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -183,7 +183,7 @@ package com.greenMagnets.application
 			var value:URLVariables = new URLVariables();
 			value['id'] = id;
 			value['opera'] = SCORE_MAGNETS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -203,7 +203,7 @@ package com.greenMagnets.application
 			value['email'] = email;
 			value['content'] = content;
 			value['opera'] = COMMENT_MAGNETS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -222,7 +222,7 @@ package com.greenMagnets.application
 			value['id'] = id;
 			value['state'] = state;
 			value['opera'] = PASS_MAGNETS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -241,7 +241,7 @@ package com.greenMagnets.application
 			value['id'] = id;
 			value['state'] = state;
 			value['opera'] = PASS_COMMENT;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -258,7 +258,7 @@ package com.greenMagnets.application
 			var value:URLVariables = new URLVariables();
 			value['data'] = com.adobe.serialization.json.JSON.encode( news );
 			value['opera'] = CREATE_NEWS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -274,7 +274,7 @@ package com.greenMagnets.application
 			var value:URLVariables = new URLVariables();
 			value['data'] = id;
 			value['opera'] = DEL_NEWS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -290,7 +290,7 @@ package com.greenMagnets.application
 			var value:URLVariables = new URLVariables();
 			value['data'] = com.adobe.serialization.json.JSON.encode( news );
 			value['opera'] = EDIT_NEWS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -305,7 +305,7 @@ package com.greenMagnets.application
 		{
 			var value:URLVariables = new URLVariables();
 			value['opera'] = GET_NEWS;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -324,7 +324,7 @@ package com.greenMagnets.application
 			value['user'] = user;
 			value['pwd'] = pwd;
 			value['opera'] = SIGN_IN;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -343,7 +343,7 @@ package com.greenMagnets.application
 			value['email'] = email;
 			value['pwd'] = pwd;
 			value['opera'] = LOG_IN;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -364,7 +364,7 @@ package com.greenMagnets.application
 			value['oldPwd'] = oldPwd;
 			value['newPwd'] = newPwd;
 			value['opera'] = RESET_PWD;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );
@@ -381,7 +381,7 @@ package com.greenMagnets.application
 			var value:URLVariables = new URLVariables();
 			value['user'] = user;
 			value['opera'] = RESET_INFO;
-			var url:URLRequest = new URLRequest( Config.INTERFACE_URL );
+			var url:URLRequest = new URLRequest( Config.interfaceUrl );
 			url.data = value;
 			url.method = URLRequestMethod.POST;
 			loader.load( url );

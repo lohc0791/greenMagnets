@@ -1,0 +1,20 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+s|SkinnableContainer
+{
+	skinClass:ClassReference("com.greenMagnets.skin.MyContainer");
+}
+
+.whiteContainer
+{
+	bgStroke:#FFFFFF;
+	backgroundColor:#FFFFFF;
+}
+
+.heibaiContainer
+{
+	bgStroke:#E5E4E2;
+	backgroundColor:#CCCCCC;
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="400" height="70"
+		 title="now uploading...">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			private static var _instance:UploadStateView;
+			public static function get instance():UploadStateView
+			{
+				_instance = _instance || new UploadStateView;
+				return _instance;
+			}
+			
+			public function setProgress( num:int, total:int, per:Number ):void
+			{
+				progress.setProgress( per, 1 );
+				progress.label = num + "/" + total;
+			}
+		]]>
+	</fx:Script>
+	<mx:ProgressBar id="progress" mode="manual" labelPlacement="right" width="200" horizontalCenter="0"/>
+</s:Panel>

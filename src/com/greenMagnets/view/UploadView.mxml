@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.greenMagnets.application.ServiceManager;
+			import com.greenMagnets.domain.Magnet;
+			import com.greenMagnets.utils.Config;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			private var magnet:Magnet;
+			
+			private var fileRefList:FileReferenceList = new FileReferenceList();
+			private var imagefiles:Vector.<FileReference>;
+			
+			[Bindable]
+			public var imageList:ArrayCollection = new ArrayCollection();
+			
+			public function getFilterType():Array
+			{
+				return [ new FileFilter( "image(*.jpg, *.jpeg, *.png)", "*.jpg;*.jpeg;*.png") ];
+			}
+
+			private var $loadPosition:int = 0;
+			protected function selectedHandler( event:Event ):void
+			{
+				$loadPosition = 0;	
+				imagefiles = imagefiles || new Vector.<FileReference>();
+				fileRefList.fileList[$loadPosition].addEventListener(Event.COMPLETE, imageFileLoadCompleteHandler );
+				fileRefList.fileList[$loadPosition].addEventListener(ProgressEvent.PROGRESS, imageFileLoadProgressHandler );
+				UploadStateView.instance.title = "now loading...";
+				PopUpManager.addPopUp( UploadStateView.instance, FlexGlobals.topLevelApplication as DisplayObject, true );
+				PopUpManager.centerPopUp( UploadStateView.instance );
+				fileRefList.fileList[$loadPosition].load();
+			}
+			
+			protected function imageFileLoadCompleteHandler( event:Event ):void
+			{
+				fileRefList.fileList[$loadPosition].removeEventListener(Event.COMPLETE, imageFileLoadCompleteHandler );
+				fileRefList.fileList[$loadPosition].removeEventListener(ProgressEvent.PROGRESS, imageFileLoadProgressHandler );
+				imagefiles.push( fileRefList.fileList[$loadPosition] );
+				imageList.addItem( imagefiles[$loadPosition].data );
+				if( $loadPosition < fileRefList.fileList.length - 1 )
+				{
+					$loadPosition++;
+					fileRefList.fileList[$loadPosition].addEventListener(Event.COMPLETE, imageFileLoadCompleteHandler );
+					fileRefList.fileList[$loadPosition].addEventListener(ProgressEvent.PROGRESS, imageFileLoadProgressHandler );
+					fileRefList.fileList[$loadPosition].load();
+				}else
+				{
+					PopUpManager.removePopUp( UploadStateView.instance );
+					startUploadImage();
+				}
+			}
+			
+			protected function imageFileLoadProgressHandler( event:ProgressEvent ):void
+			{
+				UploadStateView.instance.setProgress( $loadPosition + 1, fileRefList.fileList.length, 
+					event.bytesLoaded / event.bytesTotal );
+			}
+			
+			private var $uploadPosition:int = 0;
+			protected function startUploadImage( ):void
+			{
+				$uploadPosition = 0;
+				imagefiles[$uploadPosition].addEventListener( DataEvent.UPLOAD_COMPLETE_DATA, dataHandler );
+				imagefiles[$uploadPosition].addEventListener( ProgressEvent.PROGRESS, uploadProgressHandler );
+				imagefiles[$uploadPosition].upload( new URLRequest( Config.imageUploaderUrl ) );
+				UploadStateView.instance.title = "now uploading...";
+				PopUpManager.addPopUp( UploadStateView.instance, FlexGlobals.topLevelApplication as DisplayObject, true );
+				PopUpManager.centerPopUp( UploadStateView.instance );
+			}
+			
+			protected function uploadProgressHandler( event:ProgressEvent ):void
+			{
+				UploadStateView.instance.setProgress( $uploadPosition + 1, imagefiles.length, 
+					event.bytesLoaded / event.bytesTotal );
+			}
+			
+			protected function dataHandler( event:DataEvent ):void
+			{
+				imagefiles[$uploadPosition].removeEventListener( DataEvent.UPLOAD_COMPLETE_DATA, dataHandler );
+				imagefiles[$uploadPosition].removeEventListener( ProgressEvent.PROGRESS, uploadProgressHandler );
+				magnet.images = magnet.images || [ ];
+				magnet.images.push( event.data );
+				if( $uploadPosition < imagefiles.length - 1 )
+				{
+					$uploadPosition++;
+					imagefiles[$uploadPosition].addEventListener( DataEvent.UPLOAD_COMPLETE_DATA, dataHandler );
+					imagefiles[$uploadPosition].addEventListener( ProgressEvent.PROGRESS, uploadProgressHandler );
+					imagefiles[$uploadPosition].upload( new URLRequest( Config.imageUploaderUrl ) );
+					magnet.image_urls += event.data + "|||";
+				}else
+				{
+					PopUpManager.removePopUp( UploadStateView.instance );
+					imagefiles.splice( 0, imagefiles.length );
+					Alert.show("upload success!");
+					magnet.image_urls += event.data;
+					
+					ServiceManager.createMagnets( magnet );
+				}
+			}
+
+			protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				fileRefList.addEventListener(Event.SELECT, selectedHandler );
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:HorizontalLayout paddingTop="10" paddingRight="10" paddingLeft="10" paddingBottom="10" gap="10"/>
+	</s:layout>
+	
+	<s:SkinnableContainer width="260" height="700" styleName="heibaiContainer">
+		<s:layout>
+			<s:VerticalLayout paddingTop="10" paddingRight="10" paddingLeft="10" paddingBottom="10" gap="10"/>
+		</s:layout>
+		
+		<s:Form>
+			<s:FormItem label="email:">
+				<s:TextInput id="emailipt"/>
+			</s:FormItem>
+			<s:FormItem label="title:">
+				<s:TextInput id="titlepit"/>
+			</s:FormItem>
+			<s:FormItem label="continent">
+				<s:TextInput id="continentipt"/>
+			</s:FormItem>
+			<s:FormItem label="country:">
+				<s:TextInput id="countryipt"/>
+			</s:FormItem>
+			<s:FormItem label="city">
+				<s:TextInput id="cityipt"/>
+			</s:FormItem>
+			<s:Button label="submit" click="fileRefList.browse( getFilterType() )"/>
+		</s:Form>
+	</s:SkinnableContainer>
+	
+	<s:SkinnableContainer width="100%" height="100%" styleName="heibaiContainer" >
+		<s:Label text="click to up load photos" verticalCenter="0" horizontalCenter="0"/>
+		<s:List id="list" top="10" bottom="10" left="10" right="10" 
+				dataProvider="{imageList}"
+				skinClass="com.greenMagnets.skin.ListSkin">
+			<s:layout>
+				<s:TileLayout />
+			</s:layout>
+			<s:itemRenderer>
+				<fx:Component>
+					<s:ItemRenderer width="200" height="200">
+						<fx:Script>
+							<![CDATA[
+								override public function set data( value:Object ):void
+								{
+									super.data = value;
+									
+									img.source = data;
+								}
+							]]>
+						</fx:Script>
+						<s:Rect width="100%" height="100%" radiusX="5" radiusY="5">
+							<s:fill>
+								<s:SolidColor color="0x38B143"/>
+							</s:fill>
+						</s:Rect>
+						<s:Image id="img" 
+								 width="180" height="180" horizontalCenter="0" verticalCenter="0"
+								 scaleMode="letterbox" verticalAlign="middle" horizontalAlign="center"/>
+						<s:Button top="5" right="5" skinClass="spark.skins.spark.TitleWindowCloseButtonSkin" width="14" height="14"/>
+					</s:ItemRenderer>
+				</fx:Component>
+			</s:itemRenderer>
+		</s:List>
+	</s:SkinnableContainer>
+	
+</s:SkinnableContainer>

@@ -2,8 +2,23 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   minWidth="955" minHeight="600">
-	<fx:Declarations>
-		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
-	</fx:Declarations>
+			   xmlns:view="com.greenMagnets.view.*"
+			   minWidth="955" minHeight="600"
+			   backgroundColor="0xB4DCAF"
+			   currentState="upload" >
+	
+	<s:states>
+		<s:State name="intro"/>
+		<s:State name="map"/>
+		<s:State name="news"/>
+		<s:State name="upload"/>
+		<s:State name="detail"/>
+	</s:states>
+	
+	<fx:Style source="style/style.css"/>
+	
+	<view:IntroView width="1360" height="100%" y="10" bottom="10" horizontalCenter="0" styleName="whiteContainer" includeIn="intro"/>
+	<view:MapView width="1360" height="100%" y="10" bottom="10" horizontalCenter="0" styleName="whiteContainer" includeIn="map"/>
+	<view:DetailView width="1360" height="800" y="10" horizontalCenter="0" styleName="whiteContainer" includeIn="detail"/>
+	<view:UploadView width="1360" height="800" y="10" horizontalCenter="0" styleName="whiteContainer" includeIn="upload"/>
 </s:Application>

@@ -32,9 +32,9 @@ package com.greenMagnets.domain
 		 */
 		public var id:String;							
 		
-		public var image_urls:String;
+		public var image_urls:String = "";
 		
-		public var name:String;
+		public var name:String = "";
 		/**
 		 * 创建日期
 		 */

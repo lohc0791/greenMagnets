@@ -36,8 +36,6 @@ package com.greenMagnets.utils
 				var didx:int = str.indexOf( "=", 0 );
 				var key:String = StringUtil.trim( str.substring( 0, didx - 1 ) );
 				var value:String = StringUtil.trim( str.substring( didx + 1 ) );
-				if( Config['hasOwnProperty']( key ) )
-					trace( "发现重复的国际化项，位置为", key );
 				Config[key] = value;
 			}
 		}

@@ -76,12 +76,18 @@
 			protected function startUploadImage( ):void
 			{
 				$uploadPosition = 0;
+				imagefiles[$uploadPosition].addEventListener( IOErrorEvent.IO_ERROR, ioErr );
 				imagefiles[$uploadPosition].addEventListener( DataEvent.UPLOAD_COMPLETE_DATA, dataHandler );
 				imagefiles[$uploadPosition].addEventListener( ProgressEvent.PROGRESS, uploadProgressHandler );
 				imagefiles[$uploadPosition].upload( new URLRequest( Config.imageUploaderUrl ) );
 				UploadStateView.instance.title = "now uploading...";
 				PopUpManager.addPopUp( UploadStateView.instance, FlexGlobals.topLevelApplication as DisplayObject, true );
 				PopUpManager.centerPopUp( UploadStateView.instance );
+			}
+			
+			protected function ioErr( evt:IOErrorEvent ):void
+			{
+				trace( evt.toString() );
 			}
 			
 			protected function uploadProgressHandler( event:ProgressEvent ):void
@@ -110,7 +116,7 @@
 					Alert.show("upload success!");
 					magnet.image_urls += event.data;
 					
-					ServiceManager.createMagnets( magnet );
+//					ServiceManager.createMagnets( magnet );
 				}
 			}
 
@@ -123,6 +129,18 @@
 				map.addControl( new SMViewControl );
 			}
 			
+			public function createMagnet():void
+			{
+				if( !validate() )
+					return;
+				magnet = new Magnet();
+				startUploadImage()
+			}
+			
+			public function validate():Boolean
+			{
+				return true;
+			}
 		]]>
 	</fx:Script>
 	
@@ -151,7 +169,7 @@
 			<s:FormItem label="city">
 				<s:TextInput id="cityipt"/>
 			</s:FormItem>
-			<s:Button label="submit" click="startUploadImage()"/>
+			<s:Button label="submit" click="createMagnet()"/>
 		</s:Form>
 	</s:SkinnableContainer>
 	

@@ -1,8 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					  xmlns:s="library://ns.adobe.com/flex/spark" 
-					  xmlns:mx="library://ns.adobe.com/flex/mx">
+					  xmlns:mx="library://ns.adobe.com/flex/mx" 
+					  xmlns:tilemap="com.mapquest.tilemap.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.greenMagnets.application.ServiceManager;
+			import com.greenMagnets.domain.Magnet;
+			import com.mapquest.LatLng;
+			import com.mapquest.tilemap.pois.Poi;
+			
+			private var page:int = 0;
+			private var pageSize:int = 5;
+			
+			private var dic:Dictionary = new Dictionary();
+			
+			public function loadMagnet():void
+			{
+				ServiceManager.getMagnets( 1, "", 0, 5, loadMagnetHandler );
+			}
+			
+			public function loadMagnetHandler( data:Object ):void
+			{
+				if( data['magnets'].length >= pageSize )
+				{
+					page += data['magnets'].length;
+					ServiceManager.getMagnets( 1, "", page, pageSize, loadMagnetHandler );
+				}
+				
+				for each( var magnet:Object in data['magnets'] )
+				{
+					var latlng:LatLng = new LatLng( Number( magnet['lat'] ), Number( magnet['lng'] ) );
+					var poi:Poi = new Poi( latlng );
+					dic[poi] = magnet;
+					poi.addEventListener( MouseEvent.CLICK, poiClickHandler );
+					map.addShape( poi );
+				}
+			}
+			
+			protected function poiClickHandler( event:MouseEvent ):void
+			{
+				GreenMagnets.instance.currentState = "detail";
+				GreenMagnets.instance.detail.currentMagnet = Magnet.setup( dic[event.target] );
+			}
+		]]>
+	</fx:Script>
+	
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout />
+	</s:layout>
+	
+	<tilemap:TilemapComponent id="map"
+							  width="100%" height="100%"
+							  key="Fmjtd%7Cluua210b29%2C2s%3Do5-h4121"
+							  />
 </s:SkinnableContainer>

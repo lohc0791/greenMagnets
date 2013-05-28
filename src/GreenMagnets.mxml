@@ -5,7 +5,27 @@
 			   xmlns:view="com.greenMagnets.view.*"
 			   minWidth="955" minHeight="600"
 			   backgroundColor="0xB4DCAF"
-			   currentState="upload" >
+			   currentState="map"
+			   creationComplete="init(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.greenMagnets.utils.Config;
+			
+			import mx.events.FlexEvent;
+			
+			private static var _instance:GreenMagnets;
+			public static function get instance():GreenMagnets
+			{
+				return _instance;
+			}
+			
+			protected function init(event:FlexEvent):void
+			{
+				Config.init();
+				_instance = this;
+			}
+		]]>
+	</fx:Script>
 	
 	<s:states>
 		<s:State name="intro"/>
@@ -17,8 +37,8 @@
 	
 	<fx:Style source="style/style.css"/>
 	
-	<view:IntroView width="1360" height="100%" y="10" bottom="10" horizontalCenter="0" styleName="whiteContainer" includeIn="intro"/>
-	<view:MapView width="1360" height="100%" y="10" bottom="10" horizontalCenter="0" styleName="whiteContainer" includeIn="map"/>
-	<view:DetailView width="1360" height="800" y="10" horizontalCenter="0" styleName="whiteContainer" includeIn="detail"/>
-	<view:UploadView width="1360" height="800" y="10" horizontalCenter="0" styleName="whiteContainer" includeIn="upload"/>
+	<view:IntroView id="intro" width="1360" height="100%" y="10" bottom="10" horizontalCenter="0" styleName="whiteContainer" includeIn="intro"/>
+	<view:MapView id="map" width="1360" height="100%" y="10" bottom="10" horizontalCenter="0" styleName="whiteContainer" includeIn="map"/>
+	<view:DetailView id="detail" width="1360" height="800" y="10" horizontalCenter="0" styleName="whiteContainer" includeIn="detail"/>
+	<view:UploadView id="upload" width="1360" height="800" y="10" horizontalCenter="0" styleName="whiteContainer" includeIn="upload"/>
 </s:Application>
